@@ -32,7 +32,9 @@ export default function Growth() {
   useEffect(() => {
     async function grabData() {
       try {
-        const response = await axios.get("http://localhost:3000/growth");
+        const response = await axios.get(
+          "https://sneat-backend-e54d9967a82c.herokuapp.com/growth"
+        );
         if (response.status === 200) {
           setData(response.data);
         }

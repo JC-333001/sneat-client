@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL = "http://localhost:3000";
+const URL = "https://sneat-backend-e54d9967a82c.herokuapp.com";
 
 export async function createUser(user) {
   const response = await axios.post(`${URL}/users`, user);
@@ -37,7 +37,7 @@ export async function updateUser(id, user) {
 
 export async function verifyUser(user) {
   const response = await axios.post(`${URL}/users/login`, user);
-  //   console.log("verify user", response);
+  console.log("verify user", response);
   if (response.data.success) {
     return response.data.token;
   } else {
