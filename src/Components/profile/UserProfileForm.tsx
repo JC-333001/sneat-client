@@ -78,7 +78,7 @@ const UserProfileForm = ({ userInfo }: { userInfo: User }) => {
           }}
         >
           <TextField
-            sx={{ width: "250px" }}
+            sx={{ width: "80%" }}
             required
             id='name'
             label='Full Name:'
@@ -90,7 +90,7 @@ const UserProfileForm = ({ userInfo }: { userInfo: User }) => {
         <Grid xs={12} md={6}>
           {" "}
           <TextField
-            sx={{ width: "250px" }}
+            sx={{ width: "80%" }}
             required
             type='email'
             name='email'
@@ -102,29 +102,33 @@ const UserProfileForm = ({ userInfo }: { userInfo: User }) => {
           />
         </Grid>
         <Grid xs={12} md={6}>
-          <TextField
-            sx={{ width: "250px" }}
-            id='role'
-            label='Role:'
-            type='text'
-            name='role'
-            value={user.role}
-            onChange={handleChange}
-            disabled={!editState}
-          />
+          <Box display={"flex"} justifyContent={"center"}>
+            <TextField
+              sx={{ width: "80%" }}
+              id='role'
+              label='Role:'
+              type='text'
+              name='role'
+              value={user.role}
+              onChange={handleChange}
+              disabled={!editState}
+            />
+          </Box>
         </Grid>
         <Grid xs={12} md={6}>
-          <TextField
-            sx={{ width: "250px" }}
-            required
-            type='text'
-            name='phone'
-            id='phone'
-            value={user.phone}
-            onChange={handleChange}
-            disabled={!editState}
-            label='Phone:'
-          />
+          <Box display={"flex"} justifyContent={"center"}>
+            <TextField
+              sx={{ width: "80%" }}
+              required
+              type='text'
+              name='phone'
+              id='phone'
+              value={user.phone}
+              onChange={handleChange}
+              disabled={!editState}
+              label='Phone:'
+            />
+          </Box>
         </Grid>
         <Grid xs={12} md={6}>
           <Box display={"flex"} justifyContent={"center"}>
@@ -132,7 +136,7 @@ const UserProfileForm = ({ userInfo }: { userInfo: User }) => {
               disabled={!editState}
               options={country_names}
               value={user.country}
-              sx={{ width: "250px" }}
+              sx={{ width: "80%" }}
               onChange={(event: any, newValue: string | null) => {
                 if (newValue) {
                   setUser({ ...user, country: newValue });
@@ -154,7 +158,7 @@ const UserProfileForm = ({ userInfo }: { userInfo: User }) => {
               disabled={!editState}
               options={all_language_names}
               value={user.language}
-              sx={{ width: "250px" }}
+              sx={{ width: "80%" }}
               onChange={(event: any, newValue: string | null) => {
                 if (newValue) {
                   setUser({ ...user, language: newValue });

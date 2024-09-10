@@ -1,10 +1,8 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
-import { Paper, Box, Typography, TextField, Grid, Button } from "@mui/material";
+import { TextField, Grid, Button } from "@mui/material";
 import { User } from "../../routes/Profile";
 import { updateUser } from "../../api/user.api";
 import { useNavigate } from "react-router-dom";
-import { Divider } from "@mui/material";
-import UserDeactivateForm from "./UserDeactivateForm.tsx";
 
 const UserPasswordForm = ({ userInfo }: { userInfo: User }) => {
   const [user, setUser] = useState({ ...userInfo });
@@ -58,7 +56,7 @@ const UserPasswordForm = ({ userInfo }: { userInfo: User }) => {
     <div>
       <form onSubmit={handleSubmit}>
         <h4>Account</h4>
-        <Grid container xs={12}>
+        <Grid container>
           <Grid item xs={12} md={6}>
             <TextField
               required

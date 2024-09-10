@@ -16,7 +16,7 @@ export async function createImage(file, userId) {
       "successfully create an image with url=",
       response.data.imageUrl
     );
-    return response;
+    return response.data.imageUrl;
   } catch (e) {
     console.error("Fail to create image in AWS", e);
   }

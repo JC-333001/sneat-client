@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useState,
-  useCallback,
-  FormEvent,
-  ChangeEvent,
-} from "react";
+import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import Grid from "@mui/material/Unstable_Grid2";
 import { styled } from "@mui/material/styles";
@@ -16,9 +10,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import banner from "../img/profile/profile-banner.png";
 import userPhoto from "../img/profile/user-photo.png";
-import { updateUser } from "../api/user.api";
 import "./profile.css";
-import { ObjectId } from "mongodb";
 import AdbIcon from "@mui/icons-material/Adb";
 import PersonPinCircleIcon from "@mui/icons-material/PersonPinCircle";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -38,7 +30,7 @@ export interface User {
   country: string;
   role: string;
   language: string;
-  imageId: string;
+  imageUrl: string | null;
 }
 
 export default function Profile() {
@@ -52,8 +44,10 @@ export default function Profile() {
     country: "",
     role: "",
     language: "",
-    imageId: "",
+    imageUrl: null,
   });
+
+  const [preview, setPreview] = useState<string | null>(null);
 
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: "background.paper",
@@ -117,10 +111,14 @@ export default function Profile() {
               component='img'
               sx={{
                 width: "150px",
+                height: "150px",
                 borderRadius: "5px",
                 border: "5px white solid",
+                objectFit: "cover",
               }}
-              image={userPhoto}
+              image={
+                preview ? preview : user.imageUrl ? user.imageUrl : userPhoto
+              }
               alt='user photo'
             />
             <div className='info-box'>
@@ -137,7 +135,7 @@ export default function Profile() {
                       fontWeight={500}
                       fontSize={15}
                     >
-                      {user.role}
+                      {user.role ? user.role : "Alien"}
                     </Typography>
                   </SubBox>
                   <SubBox>
@@ -148,7 +146,7 @@ export default function Profile() {
                       fontWeight={500}
                       fontSize={15}
                     >
-                      {user && user.country ? user.country : ""}
+                      {user && user.country ? user.country : "Mars"}
                     </Typography>
                   </SubBox>
                   <SubBox>
@@ -168,7 +166,7 @@ export default function Profile() {
                   </SubBox>
                 </div>
               </div>
-              <UserImageUpload userInfo={user} />
+              <UserImageUpload userInfo={user} setPreview={setPreview} />
             </div>
           </CardContent>
         </Card>

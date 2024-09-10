@@ -306,7 +306,6 @@ export default function NavLeft({ children }) {
                 }}
               >
                 <MenuItem onClick={handleProfile}>Profile</MenuItem>
-                <MenuItem onClick={handleMenuClose}>My account</MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </Box>
