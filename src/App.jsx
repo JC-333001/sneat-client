@@ -16,6 +16,7 @@ import Signup from "./Components/authentication/Signup.tsx";
 import Login from "./Components/authentication/Login.tsx";
 import Profile from "./routes/Profile.tsx";
 import axios from "axios";
+import PrivateRoute from "./routes/PrivateRoute.tsx";
 
 function App() {
   const { theme } = useColorContext();

@@ -59,7 +59,7 @@ const UserPasswordForm = ({ userInfo }: { userInfo: User }) => {
       <form onSubmit={handleSubmit}>
         <h4>Account</h4>
         <Grid container xs={12}>
-          <Grid xs={12} md={6}>
+          <Grid item xs={12} md={6}>
             <TextField
               required
               type='password'
@@ -71,7 +71,7 @@ const UserPasswordForm = ({ userInfo }: { userInfo: User }) => {
               label='Password:'
             />
           </Grid>
-          <Grid xs={12} md={6}>
+          <Grid item xs={12} md={6}>
             <TextField
               required
               type='password'
@@ -83,7 +83,7 @@ const UserPasswordForm = ({ userInfo }: { userInfo: User }) => {
               label='Confirm Password:'
             />
           </Grid>
-          <Grid xs={12} sx={{ marginTop: "10px" }}>
+          <Grid item xs={12} sx={{ marginTop: "10px" }}>
             {editState ? (
               <div>
                 <Button

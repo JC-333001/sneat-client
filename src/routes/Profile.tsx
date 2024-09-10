@@ -26,6 +26,7 @@ import UserProfileForm from "../Components/profile/UserProfileForm.tsx";
 import { getUser } from "../api/user.api";
 import UserPasswordForm from "../Components/profile/UserPasswordForm.tsx";
 import UserDeactivateForm from "../Components/profile/UserDeactivateForm.tsx";
+import UserImageUpload from "../Components/profile/UserImageUpload.tsx";
 
 export interface User {
   _id: string;
@@ -37,6 +38,7 @@ export interface User {
   country: string;
   role: string;
   language: string;
+  imageId: string;
 }
 
 export default function Profile() {
@@ -50,6 +52,7 @@ export default function Profile() {
     country: "",
     role: "",
     language: "",
+    imageId: "",
   });
 
   const Item = styled(Paper)(({ theme }) => ({
@@ -86,7 +89,6 @@ export default function Profile() {
     alignItems: "center",
     justifyContent: "start",
     marginRight: "5px",
-    // minWidth: "150px",
   }));
 
   return (
@@ -166,22 +168,7 @@ export default function Profile() {
                   </SubBox>
                 </div>
               </div>
-
-              {/* <Button
-                  onClick={hadleEdit}
-                  sx={{
-                    color: "white",
-                    bgcolor: "primary.main",
-                    "&:hover": {
-                      bgcolor: "primary.main",
-                    },
-                    marginRight: "5px",
-                    height: "3rem",
-                    minWidth: "8rem",
-                  }}
-                >
-                  {editState ? "Save" : "Edit Profile"}
-                </Button> */}
+              <UserImageUpload userInfo={user} />
             </div>
           </CardContent>
         </Card>
@@ -210,86 +197,3 @@ export default function Profile() {
     </Grid>
   );
 }
-
-// const UserProfileForm = React.memo(({ userInfo }: { userInfo: User }) => {
-//   let [user, setUser] = useState({ ...userInfo });
-//   const [editState, setEditState] = useState(false);
-//   // Update user state when userInfo prop changes
-//   useEffect(() => {
-//     setUser(userInfo);
-//   }, [userInfo]);
-//   const handleChange = useCallback(
-//     (e: ChangeEvent<HTMLInputElement>) => {
-//       const { name, value } = e.target;
-//       setUser((prevUser) => ({
-//         ...prevUser,
-//         [name]: value,
-//       }));
-//     },
-//     [setUser]
-//   );
-
-//   const handleEdit = () => {
-//     setEditState(!editState);
-//   };
-
-//   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-//     e.preventDefault();
-//     try {
-//       await updateUser(user._id, user);
-//       handleEdit(); // Close edit mode
-//     } catch (error) {
-//       console.error("Error saving profile:", error);
-//     }
-//   };
-
-//   return (
-//     <Paper>
-//       <Box padding={"10px 15px"}>
-//         <form onSubmit={handleSubmit}>
-//           <Typography variant='h6'>About</Typography>
-//           {editState ? (
-//             <button type='submit'>Save</button>
-//           ) : (
-//             <button type='button' onClick={handleEdit}>
-//               Edit
-//             </button>
-//           )}
-//           <div className='form-ele'>
-//             <label htmlFor='name'>Full Name:</label>
-//             <input
-//               type='text'
-//               name='name'
-//               id='name'
-//               value={user.name}
-//               onChange={handleChange}
-//               disabled={!editState}
-//             />
-//           </div>
-//           <div className='form-ele'>
-//             <label htmlFor='role'>Role:</label>
-//             <input
-//               type='text'
-//               name='role'
-//               id='role'
-//               value={user.role}
-//               onChange={handleChange}
-//               disabled={!editState}
-//             />
-//           </div>
-//           <div className='form-ele'>
-//             <label htmlFor='email'>Email:</label>
-//             <input
-//               type='email'
-//               name='email'
-//               id='email'
-//               value={user.email}
-//               onChange={handleChange}
-//               disabled={!editState}
-//             />
-//           </div>
-//         </form>
-//       </Box>
-//     </Paper>
-//   );
-// });

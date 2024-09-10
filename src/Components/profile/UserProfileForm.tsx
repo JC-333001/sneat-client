@@ -41,6 +41,7 @@ const UserProfileForm = ({ userInfo }: { userInfo: User }) => {
     try {
       await updateUser(user._id, user);
       setEditState(false); // Close edit mode
+      window.location.reload();
     } catch (error) {
       console.error("Error saving profile:", error);
     }
@@ -48,7 +49,6 @@ const UserProfileForm = ({ userInfo }: { userInfo: User }) => {
   };
   country_names = [...country_names, ""];
   let all_language_names = [...language_names, ""];
-  console.log(user);
   const [countryInputValue, setCountryInputValue] = React.useState(
     user.country
   );
