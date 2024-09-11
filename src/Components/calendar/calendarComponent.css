@@ -1,0 +1,42 @@
+@media screen and (max-width: 950px) {
+  .fc-header-toolbar {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.fc .fc-button {
+  background-color: #f3f3ff;
+  color: #6a6cff;
+  border: none;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+  background-color: #6a6cff;
+  color: white;
+  border: none;
+}
+.fc .fc-button-primary:disabled {
+  background-color: #f3f3ff;
+  color: #6a6cff;
+  border: none;
+}
+
+.fc .fc-button-primary:hover {
+  background-color: #e7e7ff;
+  color: #6a6cff;
+  border: none;
+}
+
+.fc-addEvent-button {
+  background-color: #6a6cff !important;
+  color: white !important;
+  font-weight: 500 !important;
+  border: none;
+  text-transform: uppercase !important;
+  text-wrap: nowrap;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  border-radius: 0.5em !important;
+  margin-right: 10px !important;
+}
