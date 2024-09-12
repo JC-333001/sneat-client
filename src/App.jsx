@@ -16,7 +16,7 @@ import Signup from "./Components/authentication/Signup.tsx";
 import Login from "./Components/authentication/Login.tsx";
 import Profile from "./routes/Profile.tsx";
 import axios from "axios";
-import PrivateRoute from "./routes/PrivateRoute.tsx";
+import Chat from "./routes/Chat.tsx"; // Add this import
 
 function App() {
   const { theme } = useColorContext();
@@ -46,6 +46,8 @@ function App() {
             </Route>
             <Route path='/calendar' element={<Calendar />}></Route>
             <Route path='/user-profile' element={<Profile />}></Route>
+            <Route path='/chat' element={<Chat />}></Route>{" "}
+            {/* Add this new route */}
           </Route>
           <Route path='/signup' element={<Signup />}></Route>
           <Route path='/login' element={<Login />}></Route>

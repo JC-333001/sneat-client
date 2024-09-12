@@ -30,7 +30,7 @@ export interface User {
   country: string;
   role: string;
   language: string;
-  imageUrl: string | null;
+  imageUrl: string;
 }
 
 export default function Profile() {
@@ -44,7 +44,7 @@ export default function Profile() {
     country: "",
     role: "",
     language: "",
-    imageUrl: null,
+    imageUrl: userPhoto,
   });
 
   const [preview, setPreview] = useState<string | null>(null);
