@@ -5,7 +5,6 @@ import RealChat from "../Components/chat/RealChat.tsx";
 export default function Chat() {
   return (
     <div>
-      <AiAssistant />
       <RealChat />
     </div>
   );

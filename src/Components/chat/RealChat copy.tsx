@@ -19,6 +19,8 @@ import {
   Box,
   InputBase,
   IconButton,
+  Drawer,
+  useMediaQuery,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import SendIcon from "@mui/icons-material/Send";
@@ -79,7 +81,7 @@ const RealChat: React.FC = () => {
       const decoded = jwtDecode<User>(token);
       const user = await getUser(decoded._id);
       setUser(user);
-      fetchChatUsers(decoded._id);
+      fetchChatUsers();
 
       // Initialize socket connection with timeout
       if (SOCKET_SERVER_URL) {
@@ -138,9 +140,9 @@ const RealChat: React.FC = () => {
     };
   }, [socket, selectedUser, user._id]);
 
-  const fetchChatUsers = async (userId: string) => {
+  const fetchChatUsers = async () => {
     const users = await getAllUser();
-    setChatUsers(users.filter((singleUser) => singleUser._id !== userId));
+    setChatUsers(users.filter((singleUser) => singleUser._id !== user._id));
   };
 
   const sendMessage = useCallback(
@@ -167,7 +169,6 @@ const RealChat: React.FC = () => {
       sx={{ height: "80vh", borderRadius: "10px", overflow: "hidden" }}
     >
       {/* Sidebar */}
-
       <Grid
         item
         xs={3}
@@ -234,7 +235,7 @@ const RealChat: React.FC = () => {
       <Grid item xs={9} sx={{ height: "100%" }}>
         <StyledPaper elevation={0} sx={{ height: "100%" }}>
           {selectedUser ? (
-            <Box display={"flex"} flexDirection={"column"} height={"100%"}>
+            <Box>
               {/* Chat header */}
 
               <Box>
@@ -250,80 +251,44 @@ const RealChat: React.FC = () => {
                 <Divider />
               </Box>
 
-              <Box
-                display={"flex"}
-                flexDirection={"column"}
-                height={"100%"}
-                justifyContent={"space-between"}
-              >
-                {/* Messages */}
-                <div
-                  style={{ flexGrow: 1, overflowY: "auto", padding: "16px" }}
-                >
-                  {messages.map((message, index) => (
-                    <Box
-                      key={index}
-                      display='flex'
-                      alignItems='center'
-                      width='100%'
-                      justifyContent={
-                        message.senderId === user._id
-                          ? "flex-end"
-                          : "flex-start"
-                      }
-                    >
-                      {message.senderId !== user._id ? (
-                        <Avatar src={selectedUser.imageUrl} />
-                      ) : (
-                        ""
-                      )}
-                      <ChatBubble
-                        key={index}
-                        isCurrentUser={message.senderId === user._id}
-                        sx={{
-                          width: "fit-content",
-                          maxWidth: "70%",
-                          margin: "5px",
-                        }}
-                      >
-                        {message.content}
-                      </ChatBubble>
-                      {message.senderId === user._id ? (
-                        <Avatar src={user.imageUrl} />
-                      ) : (
-                        ""
-                      )}
-                    </Box>
-                  ))}
-                </div>
-                {/* Message input */}
-
-                <form onSubmit={sendMessage}>
-                  <TextField
-                    fullWidth
-                    variant='outlined'
-                    value={inputMessage}
-                    onChange={(e) => setInputMessage(e.target.value)}
-                    placeholder='Type your message here...'
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position='end'>
-                          <AttachFileIcon />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                  <Button
-                    type='submit'
-                    variant='contained'
-                    color='primary'
-                    endIcon={<SendIcon />}
-                    sx={{ mt: 1 }}
+              {/* Messages */}
+              <div style={{ flexGrow: 1, overflowY: "auto", padding: "16px" }}>
+                {messages.map((message, index) => (
+                  <ChatBubble
+                    key={index}
+                    isCurrentUser={message.senderId === user._id}
                   >
-                    Send
-                  </Button>
-                </form>
-              </Box>
+                    {message.content}
+                  </ChatBubble>
+                ))}
+              </div>
+              {/* Message input */}
+
+              <form onSubmit={sendMessage}>
+                <TextField
+                  fullWidth
+                  variant='outlined'
+                  value={inputMessage}
+                  onChange={(e) => setInputMessage(e.target.value)}
+                  placeholder='Type your message here...'
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position='end'>
+                        <AttachFileIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <Button
+                  type='submit'
+                  variant='contained'
+                  color='primary'
+                  endIcon={<SendIcon />}
+                  sx={{ mt: 1 }}
+                >
+                  Send
+                </Button>
+              </form>
             </Box>
           ) : (
             <Box
