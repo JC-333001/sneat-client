@@ -23,15 +23,21 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import SendIcon from "@mui/icons-material/Send";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
-import MenuIcon from "@mui/icons-material/Menu";
+
 import { styled } from "@mui/system";
 import { getUser, getAllUser } from "../../api/user.api";
+import userPhoto from "../../img/profile/user-photo.png";
 
 interface Message {
   senderId: string;
   receiverId: string;
   content: string;
   timestamp: Date;
+}
+
+interface ChatHistory {
+  chat: Message[];
+  chatUser: string;
 }
 
 const SOCKET_SERVER_URL = process.env.REACT_APP_BACKEND_URL;
@@ -61,13 +67,14 @@ const ChatBubble = styled("div")<{ isCurrentUser: boolean }>(
 );
 
 const RealChat: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [user, setUser] = useState<User>({} as User);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [chatUsers, setChatUsers] = useState<User[]>([]);
+  const [chatHistory, setChatHistory] = useState<ChatHistory[]>([]);
   const [socket, setSocket] = useState<Socket | null>(null);
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const initializeChat = async () => {
@@ -113,21 +120,14 @@ const RealChat: React.FC = () => {
     if (!socket) return;
 
     // Listen for the chat history from the server
-    socket.on("user_chat_history", (history: Message[]) => {
-      setMessages(history);
+    socket.on("user_chat_history", (chatHistory: ChatHistory[]) => {
+      setChatHistory(chatHistory);
     });
 
-    // Listen for new messages
-    socket.on("new message", (message: Message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
-    });
-
-    // Request chat history when a user is selected
-    if (selectedUser) {
-      console.log(selectedUser._id);
+    if (chatUsers.length > 0) {
       socket.emit("get chat history", {
         userId: user._id,
-        selectedUserId: selectedUser._id,
+        chatUsers: chatUsers,
       });
     }
 
@@ -136,11 +136,27 @@ const RealChat: React.FC = () => {
       socket.off("user_chat_history");
       socket.off("new message");
     };
-  }, [socket, selectedUser, user._id]);
+  }, [socket, user._id, chatUsers]);
 
   const fetchChatUsers = async (userId: string) => {
     const users = await getAllUser();
     setChatUsers(users.filter((singleUser) => singleUser._id !== userId));
+  };
+
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.length > 0) {
+      const users = await getAllUser();
+      setChatUsers(
+        users.filter(
+          (user) =>
+            user.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+            user._id !== user._id
+        )
+      );
+    } else {
+      fetchChatUsers(user._id);
+    }
   };
 
   const sendMessage = useCallback(
@@ -154,12 +170,17 @@ const RealChat: React.FC = () => {
           timestamp: new Date(),
         };
         socket.emit("send message", newMessage);
-        setMessages((prevMessages) => [...prevMessages, newMessage]);
+        setChatHistory((prevChatHistory) => [
+          ...prevChatHistory,
+          { chat: [newMessage], chatUser: selectedUser._id },
+        ]);
         setInputMessage("");
       }
     },
     [inputMessage, selectedUser, socket, user._id]
   );
+
+  console.log(chatHistory);
 
   return (
     <Grid
@@ -184,13 +205,18 @@ const RealChat: React.FC = () => {
             }}
           >
             <ListItemAvatar>
-              <Avatar src={user.imageUrl} />
+              <Avatar src={user.imageUrl || userPhoto} />
             </ListItemAvatar>
-            <form action='' style={{ display: "flex", alignItems: "center" }}>
+            <form
+              onSubmit={handleSearch}
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <InputBase
                 sx={{ ml: 1, flex: 1 }}
                 placeholder='Search users'
                 inputProps={{ "aria-label": "search users" }}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
               <IconButton type='submit' sx={{ p: "10px" }} aria-label='search'>
                 <SearchIcon />
@@ -209,22 +235,28 @@ const RealChat: React.FC = () => {
               Chats
             </Typography>
             <List>
-              {chatUsers.map((user) => (
-                <ListItem
-                  button
-                  key={user._id}
-                  onClick={() => setSelectedUser(user)}
-                  selected={selectedUser?._id === user._id}
-                >
-                  <ListItemAvatar>
-                    <Avatar src={user.imageUrl} />
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={user.name}
-                    secondary={"last message preview"}
-                  />
-                </ListItem>
-              ))}
+              {chatUsers.length > 0
+                ? chatUsers.map((chatUser) => (
+                    <ListItem
+                      button
+                      key={chatUser._id}
+                      onClick={() => setSelectedUser(chatUser)}
+                      selected={selectedUser?._id === chatUser._id}
+                    >
+                      <ListItemAvatar>
+                        <Avatar src={chatUser.imageUrl || userPhoto} />
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={chatUser.name}
+                        secondary={
+                          chatHistory
+                            .find((chat) => chat.chatUser === chatUser._id)
+                            ?.chat.at(-1)?.content ?? "No messages yet"
+                        }
+                      />
+                    </ListItem>
+                  ))
+                : "No users found"}
             </List>
           </Box>
         </StyledPaper>
@@ -240,7 +272,7 @@ const RealChat: React.FC = () => {
               <Box>
                 <ListItem sx={{ height: "70px" }}>
                   <ListItemAvatar>
-                    <Avatar src={selectedUser.imageUrl} />
+                    <Avatar src={selectedUser.imageUrl || userPhoto} />
                   </ListItemAvatar>
                   <ListItemText
                     primary={selectedUser.name}
@@ -260,45 +292,59 @@ const RealChat: React.FC = () => {
                 <div
                   style={{ flexGrow: 1, overflowY: "auto", padding: "16px" }}
                 >
-                  {messages.map((message, index) => (
-                    <Box
-                      key={index}
-                      display='flex'
-                      alignItems='center'
-                      width='100%'
-                      justifyContent={
-                        message.senderId === user._id
-                          ? "flex-end"
-                          : "flex-start"
-                      }
-                    >
-                      {message.senderId !== user._id ? (
-                        <Avatar src={selectedUser.imageUrl} />
-                      ) : (
-                        ""
-                      )}
-                      <ChatBubble
-                        key={index}
-                        isCurrentUser={message.senderId === user._id}
-                        sx={{
-                          width: "fit-content",
-                          maxWidth: "70%",
-                          margin: "5px",
-                        }}
-                      >
-                        {message.content}
-                      </ChatBubble>
-                      {message.senderId === user._id ? (
-                        <Avatar src={user.imageUrl} />
-                      ) : (
-                        ""
-                      )}
-                    </Box>
-                  ))}
+                  {chatHistory.length > 0
+                    ? chatHistory
+                        .filter((chat) => chat.chatUser === selectedUser._id)
+                        .flatMap((chatHis) => chatHis.chat)
+                        .map((chatHis, index) => (
+                          <Box
+                            key={index}
+                            display='flex'
+                            alignItems='center'
+                            width='100%'
+                            justifyContent={
+                              chatHis.senderId === user._id
+                                ? "flex-end"
+                                : "flex-start"
+                            }
+                          >
+                            {chatHis.senderId !== user._id ? (
+                              <Avatar
+                                src={selectedUser.imageUrl || userPhoto}
+                              />
+                            ) : (
+                              ""
+                            )}
+                            <ChatBubble
+                              key={index}
+                              isCurrentUser={chatHis.senderId === user._id}
+                              sx={{
+                                width: "fit-content",
+                                maxWidth: "70%",
+                                margin: "5px",
+                              }}
+                            >
+                              {chatHis.content}
+                            </ChatBubble>
+                            {chatHis.senderId === user._id ? (
+                              <Avatar src={user.imageUrl || userPhoto} />
+                            ) : (
+                              ""
+                            )}
+                          </Box>
+                        ))
+                    : "No messages found"}
                 </div>
                 {/* Message input */}
 
-                <form onSubmit={sendMessage}>
+                <form
+                  onSubmit={sendMessage}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
                   <TextField
                     fullWidth
                     variant='outlined'
@@ -312,13 +358,18 @@ const RealChat: React.FC = () => {
                         </InputAdornment>
                       ),
                     }}
+                    sx={{
+                      marginRight: "10px",
+                      marginLeft: "10px",
+                      marginBottom: "10px",
+                    }}
                   />
                   <Button
                     type='submit'
                     variant='contained'
                     color='primary'
                     endIcon={<SendIcon />}
-                    sx={{ mt: 1 }}
+                    sx={{ mt: 1, marginRight: "10px", marginBottom: "10px" }}
                   >
                     Send
                   </Button>
