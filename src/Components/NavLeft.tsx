@@ -468,7 +468,6 @@ export default function NavLeft({ children }) {
             </Divider>
 
             {[
-              { appName: EMAIL, icon: <EmailIcon /> },
               { appName: CHAT, icon: <ChatIcon /> },
               {
                 appName: CALENDAR,
@@ -518,7 +517,6 @@ export default function NavLeft({ children }) {
             })}
           </List>
         </Box>
-        <Divider />
       </Drawer>
       <Main open={open}>
         <DrawerHeader />

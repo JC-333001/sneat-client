@@ -19,10 +19,14 @@ import {
   Box,
   InputBase,
   IconButton,
+  AppBar,
+  Toolbar,
+  Drawer,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import SendIcon from "@mui/icons-material/Send";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { styled } from "@mui/system";
 import { getUser, getAllUser } from "../../api/user.api";
@@ -75,6 +79,8 @@ const RealChat: React.FC = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false); // New state for Drawer toggle
+  const matches = useMediaQuery("(max-width: 600px)"); // Media query for small screens
 
   useEffect(() => {
     const initializeChat = async () => {
