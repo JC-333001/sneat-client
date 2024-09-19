@@ -1,9 +1,9 @@
 import React from "react";
-import { Box, Typography, Chip } from "@mui/material";
 import LineChart from "../../echarts.components/LineChart.tsx";
+import { Box, Typography } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 
-export default function ProfitReport() {
+export default function ActivityCard() {
   return (
     <Box
       display={"flex"}
@@ -24,27 +24,13 @@ export default function ProfitReport() {
             fontWeight: "500",
             color: "text.primary",
             textAlign: "left",
+            marginBottom: "2.5rem",
           }}
           noWrap={true}
         >
-          Profit Report
+          Activity
         </Typography>
-        <Chip
-          label='Year 2024'
-          sx={{
-            borderRadius: "5px",
-            color: "info.main",
-            bgcolor: "info.light",
-          }}
-        />
-        <Typography
-          variant='subtitle2'
-          gutterBottom
-          sx={{ color: "success.main", position: "relative", top: "-5px" }}
-        >
-          <ArrowUpwardIcon sx={{ position: "relative", top: "5px" }} />
-          28.14%
-        </Typography>
+
         <Typography
           variant='h2'
           gutterBottom
@@ -54,11 +40,34 @@ export default function ProfitReport() {
             color: "text.primary",
           }}
         >
-          $84,686k
+          82%
+        </Typography>
+
+        <Typography
+          variant='subtitle2'
+          gutterBottom
+          sx={{ color: "success.main", position: "relative", top: "-5px" }}
+        >
+          <ArrowUpwardIcon sx={{ position: "relative", top: "5px" }} />
+          19.6%
         </Typography>
       </Box>
-      <Box width={"60%"}>
-        <LineChart showEnd={false} color={"orange"} />
+      <Box width={"60%"} height={"100%"}>
+        <LineChart
+          showEnd={false}
+          lineData={[
+            ["2019-10-10", 200],
+            ["2019-10-11", 560],
+            ["2019-10-12", 1750],
+            ["2019-10-13", 1580],
+            ["2019-10-14", 1250],
+            ["2019-10-15", 1300],
+            ["2019-10-16", 450],
+            ["2019-10-17", 300],
+            ["2019-10-18", 2100],
+            ["2019-10-18", 2200],
+          ]}
+        />
       </Box>
     </Box>
   );

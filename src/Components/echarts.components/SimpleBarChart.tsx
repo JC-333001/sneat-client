@@ -100,11 +100,26 @@ const SimpleBarChart: React.FC = () => {
         ],
       };
 
+      // Set the chart option
       myChart.setOption(option);
+      let resizeTimeout;
+      // Create a ResizeObserver
+      const resizeObserver = new ResizeObserver((entries) => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          for (let entry of entries) {
+            myChart.resize();
+          }
+        }, 100); // Debounce delay (100 ms in this case)
+      });
+
+      // Start observing the chart container
+      resizeObserver.observe(chartRef.current);
 
       // Cleanup on component unmount
       return () => {
         myChart.dispose();
+        resizeObserver.disconnect();
       };
     }
   }, []);

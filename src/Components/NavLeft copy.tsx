@@ -243,6 +243,7 @@ export default function NavLeft({ children }) {
         sx={{
           boxShadow: "none",
           border: "none",
+          width: "100%",
           bgcolor: "background.default",
         }}
       >
@@ -321,9 +322,13 @@ export default function NavLeft({ children }) {
             boxSizing: "border-box",
           },
         }}
-        variant='persistent'
+        variant='temporary'
         anchor='left'
         open={open}
+        onClose={handleDrawerClose}
+        ModalProps={{
+          keepMounted: true, // Better open performance on mobile.
+        }}
       >
         <DrawerHeader
           sx={{
@@ -419,7 +424,7 @@ export default function NavLeft({ children }) {
             </ListItemButton>
             <Collapse in={dashOpen} timeout='auto' unmountOnExit>
               <List component='div' disablePadding sx={{ marginTop: "0.3rem" }}>
-                {[ANALYTICS, ECOMMERCE].map((item, index) => {
+                {[ANALYTICS, CRM, ECOMMERCE].map((item, index) => {
                   return (
                     <Link
                       to={`dashboard/${item.toLowerCase()}`}
@@ -518,10 +523,21 @@ export default function NavLeft({ children }) {
           </List>
         </Box>
       </Drawer>
-      <Main open={open}>
+      {/* <Main open={open}>
         <DrawerHeader />
         {children}
-      </Main>
+      </Main> */}
+      <Box
+        component='main'
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          width: "100%",
+          marginTop: "64px", // Adjust this value based on your AppBar height
+        }}
+      >
+        {children}
+      </Box>
     </Box>
   );
 }

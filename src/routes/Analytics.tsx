@@ -15,6 +15,7 @@ import RevenueDistribution from "../Components/dashboards/analytics.components/R
 import ProfitReport from "../Components/dashboards/analytics.components/ProfitReport.tsx";
 import ActivityTimeline from "../Components/dashboards/analytics.components/ActivityTimeline.tsx";
 import VisitDataTbl from "../Components/dashboards/analytics.components/VisitDataTbl.tsx";
+import { useMediaQuery } from "@mui/material";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: "background.paper",
@@ -25,30 +26,33 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function Analytics() {
   const { mode } = useColorContext();
+  // Custom media query to change lg to 1400px
+  const isLg = useMediaQuery("(min-width:1100px)");
+  isLg ? console.log("8") : console.log("12");
   return (
     <Grid container spacing={2}>
-      <Grid xs={12} md={8}>
+      <Grid xs={12} md={isLg ? 8 : 12}>
         <Item>
           <Badge></Badge>
         </Item>
       </Grid>
-      <Grid xs={6} md={2}>
+      <Grid xs={6} md={isLg ? 2 : 6}>
         <Item>
           <OrderSum />
         </Item>
       </Grid>
-      <Grid xs={6} md={2}>
+      <Grid xs={6} md={isLg ? 2 : 6}>
         <Item>
           <Sales></Sales>
         </Item>
       </Grid>
-      <Grid container xs={12} md={8} spacing={0}>
-        <Grid xs={12} md={8}>
+      <Grid container xs={12} md={isLg ? 8 : 12} spacing={0}>
+        <Grid xs={12} md={isLg ? 8 : 12}>
           <Item>
             <TotalRevenue />
           </Item>
         </Grid>
-        <Grid xs={12} md={4}>
+        <Grid xs={12} md={isLg ? 4 : 12}>
           <Item
             sx={{
               display: "flex",
@@ -60,7 +64,7 @@ export default function Analytics() {
           </Item>
         </Grid>
       </Grid>
-      <Grid container xs={12} md={4} spacing={2} height={"320px"}>
+      <Grid container xs={12} md={isLg ? 4 : 12} spacing={2}>
         <Grid xs={6} md={6} height={"150px"}>
           <Item>
             <Payments />
@@ -77,7 +81,7 @@ export default function Analytics() {
           </Item>
         </Grid>
       </Grid>
-      <Grid xs={12} md={6}>
+      <Grid xs={12} md={isLg ? 6 : 12}>
         <Item
           sx={{
             display: "flex",
@@ -89,7 +93,7 @@ export default function Analytics() {
           <ActivityTimeline />
         </Item>
       </Grid>
-      <Grid xs={12} md={6}>
+      <Grid xs={12} md={isLg ? 6 : 12}>
         <Item
           sx={{
             display: "flex",

@@ -27,6 +27,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import SendIcon from "@mui/icons-material/Send";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import MenuIcon from "@mui/icons-material/Menu";
 
 import { styled } from "@mui/system";
 import { getUser, getAllUser } from "../../api/user.api";
@@ -79,8 +80,8 @@ const RealChat: React.FC = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false); // New state for Drawer toggle
-  const matches = useMediaQuery("(max-width: 600px)"); // Media query for small screens
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const isMobile = useMediaQuery("(max-width:900px)");
 
   useEffect(() => {
     const initializeChat = async () => {
@@ -194,89 +195,184 @@ const RealChat: React.FC = () => {
       sx={{ height: "80vh", borderRadius: "10px", overflow: "hidden" }}
     >
       {/* Sidebar */}
-
-      <Grid
-        item
-        xs={3}
-        sx={{ height: "100%", borderRight: "1px solid #B2B9C1" }}
-      >
-        <StyledPaper elevation={0} sx={{ height: "100%" }}>
-          {/* User profile */}
-          <ListItem
-            sx={{
-              height: "70px",
-              display: "flex",
-              justifyContent: "center !important",
-              alignItems: "center !important",
-            }}
-          >
-            <ListItemAvatar>
-              <Avatar src={user.imageUrl || userPhoto} />
-            </ListItemAvatar>
-            <form
-              onSubmit={handleSearch}
-              style={{ display: "flex", alignItems: "center" }}
+      {!isMobile && (
+        <Grid
+          item
+          xs={3}
+          sx={{ height: "100%", borderRight: "1px solid #B2B9C1" }}
+        >
+          <StyledPaper elevation={0} sx={{ height: "100%" }}>
+            {/* User profile */}
+            <ListItem
+              sx={{
+                height: "70px",
+                display: "flex",
+                justifyContent: "center !important",
+                alignItems: "center !important",
+              }}
             >
-              <InputBase
-                sx={{ ml: 1, flex: 1 }}
-                placeholder='Search users'
-                inputProps={{ "aria-label": "search users" }}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <IconButton type='submit' sx={{ p: "10px" }} aria-label='search'>
-                <SearchIcon />
-              </IconButton>
-            </form>
-          </ListItem>
-          <Divider />
+              <ListItemAvatar>
+                <Avatar src={user.imageUrl || userPhoto} />
+              </ListItemAvatar>
+              <form
+                onSubmit={handleSearch}
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <InputBase
+                  sx={{ ml: 1, flex: 1 }}
+                  placeholder='Search users'
+                  inputProps={{ "aria-label": "search users" }}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <IconButton
+                  type='submit'
+                  sx={{ p: "10px" }}
+                  aria-label='search'
+                >
+                  <SearchIcon />
+                </IconButton>
+              </form>
+            </ListItem>
+            <Divider />
 
-          {/* Chats section */}
-          <Box
-            sx={{
-              height: "50vh",
-            }}
-          >
-            <Typography variant='h6' sx={{ mt: 2, mb: 1, px: 2 }}>
-              Chats
-            </Typography>
-            <List>
-              {chatUsers.length > 0
-                ? chatUsers.map((chatUser) => (
-                    <ListItem
-                      button
-                      key={chatUser._id}
-                      onClick={() => setSelectedUser(chatUser)}
-                      selected={selectedUser?._id === chatUser._id}
-                    >
-                      <ListItemAvatar>
-                        <Avatar src={chatUser.imageUrl || userPhoto} />
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={chatUser.name}
-                        secondary={
-                          chatHistory
-                            .find((chat) => chat.chatUser === chatUser._id)
-                            ?.chat.at(-1)?.content ?? "No messages yet"
-                        }
-                      />
-                    </ListItem>
-                  ))
-                : "No users found"}
-            </List>
-          </Box>
-        </StyledPaper>
-      </Grid>
+            {/* Chats section */}
+            <Box
+              sx={{
+                height: "50vh",
+              }}
+            >
+              <Typography variant='h6' sx={{ mt: 2, mb: 1, px: 2 }}>
+                Chats
+              </Typography>
+              <List>
+                {chatUsers.length > 0
+                  ? chatUsers.map((chatUser) => (
+                      <ListItem
+                        button
+                        key={chatUser._id}
+                        onClick={() => setSelectedUser(chatUser)}
+                        selected={selectedUser?._id === chatUser._id}
+                      >
+                        <ListItemAvatar>
+                          <Avatar src={chatUser.imageUrl || userPhoto} />
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={chatUser.name}
+                          secondary={
+                            chatHistory
+                              .find((chat) => chat.chatUser === chatUser._id)
+                              ?.chat.at(-1)?.content ?? "No messages yet"
+                          }
+                        />
+                      </ListItem>
+                    ))
+                  : "No users found"}
+              </List>
+            </Box>
+          </StyledPaper>
+        </Grid>
+      )}
+
+      {/* Mobile Drawer */}
+      <Drawer
+        anchor='left'
+        open={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+      >
+        <Box sx={{ width: 250 }}>
+          <StyledPaper elevation={0} sx={{ height: "100%" }}>
+            {/* User profile */}
+            <ListItem
+              sx={{
+                height: "70px",
+                display: "flex",
+                justifyContent: "center !important",
+                alignItems: "center !important",
+              }}
+            >
+              <ListItemAvatar>
+                <Avatar src={user.imageUrl || userPhoto} />
+              </ListItemAvatar>
+              <form
+                onSubmit={handleSearch}
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <InputBase
+                  sx={{ ml: 1, flex: 1 }}
+                  placeholder='Search users'
+                  inputProps={{ "aria-label": "search users" }}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <IconButton
+                  type='submit'
+                  sx={{ p: "10px" }}
+                  aria-label='search'
+                >
+                  <SearchIcon />
+                </IconButton>
+              </form>
+            </ListItem>
+            <Divider />
+
+            {/* Chats section */}
+            <Box
+              sx={{
+                height: "50vh",
+              }}
+            >
+              <Typography variant='h6' sx={{ mt: 2, mb: 1, px: 2 }}>
+                Chats
+              </Typography>
+              <List>
+                {chatUsers.length > 0
+                  ? chatUsers.map((chatUser) => (
+                      <ListItem
+                        button
+                        key={chatUser._id}
+                        onClick={() => setSelectedUser(chatUser)}
+                        selected={selectedUser?._id === chatUser._id}
+                      >
+                        <ListItemAvatar>
+                          <Avatar src={chatUser.imageUrl || userPhoto} />
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={chatUser.name}
+                          secondary={
+                            chatHistory
+                              .find((chat) => chat.chatUser === chatUser._id)
+                              ?.chat.at(-1)?.content ?? "No messages yet"
+                          }
+                        />
+                      </ListItem>
+                    ))
+                  : "No users found"}
+              </List>
+            </Box>
+          </StyledPaper>
+        </Box>
+      </Drawer>
 
       {/* Chat area */}
-      <Grid item xs={9} sx={{ height: "100%" }}>
+      <Grid item xs={isMobile ? 12 : 9} sx={{ height: "100%" }}>
         <StyledPaper elevation={0} sx={{ height: "100%" }}>
           {selectedUser ? (
             <Box display={"flex"} flexDirection={"column"} height={"100%"}>
               {/* Chat header */}
-
               <Box>
                 <ListItem sx={{ height: "70px" }}>
+                  {isMobile && (
+                    <IconButton
+                      edge='start'
+                      color='inherit'
+                      aria-label='menu'
+                      onClick={() => setIsDrawerOpen(true)}
+                      sx={{ mr: 2 }}
+                    >
+                      <MenuIcon />
+                    </IconButton>
+                  )}
                   <ListItemAvatar>
                     <Avatar src={selectedUser.imageUrl || userPhoto} />
                   </ListItemAvatar>
@@ -389,6 +485,17 @@ const RealChat: React.FC = () => {
               alignItems={"center"}
               height={"100%"}
             >
+              {isMobile && (
+                <IconButton
+                  edge='start'
+                  color='inherit'
+                  aria-label='menu'
+                  onClick={() => setIsDrawerOpen(true)}
+                  sx={{ position: "absolute", top: 10, left: 10 }}
+                >
+                  <MenuIcon />
+                </IconButton>
+              )}
               <Typography variant='h6'>Select a user to start chat</Typography>
             </Box>
           )}

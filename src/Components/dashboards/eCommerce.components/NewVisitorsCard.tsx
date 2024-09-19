@@ -1,9 +1,9 @@
 import React from "react";
 import { Box, Typography, Chip } from "@mui/material";
-import LineChart from "../../echarts.components/LineChart.tsx";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import BasicBarChart from "../../echarts.components/BasicBarChart.tsx";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
-export default function ProfitReport() {
+export default function NewVisitorsCard() {
   return (
     <Box
       display={"flex"}
@@ -24,27 +24,13 @@ export default function ProfitReport() {
             fontWeight: "500",
             color: "text.primary",
             textAlign: "left",
+            marginBottom: "2.5rem",
           }}
           noWrap={true}
         >
-          Profit Report
+          New Visitors
         </Typography>
-        <Chip
-          label='Year 2024'
-          sx={{
-            borderRadius: "5px",
-            color: "info.main",
-            bgcolor: "info.light",
-          }}
-        />
-        <Typography
-          variant='subtitle2'
-          gutterBottom
-          sx={{ color: "success.main", position: "relative", top: "-5px" }}
-        >
-          <ArrowUpwardIcon sx={{ position: "relative", top: "5px" }} />
-          28.14%
-        </Typography>
+
         <Typography
           variant='h2'
           gutterBottom
@@ -54,11 +40,20 @@ export default function ProfitReport() {
             color: "text.primary",
           }}
         >
-          $84,686k
+          23%
+        </Typography>
+
+        <Typography
+          variant='subtitle2'
+          gutterBottom
+          sx={{ color: "warn", position: "relative", top: "-5px" }}
+        >
+          <ArrowDownwardIcon sx={{ position: "relative", top: "5px" }} />
+          8.75%
         </Typography>
       </Box>
-      <Box width={"60%"}>
-        <LineChart showEnd={false} color={"orange"} />
+      <Box width={"60%"} height={"100%"}>
+        <BasicBarChart />
       </Box>
     </Box>
   );

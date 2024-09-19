@@ -4,9 +4,17 @@ import { useColorContext } from "../../context/ColorModeContext.tsx";
 
 interface GrowthGaugeChartProps {
   growthValue: number;
+  chartName?: string;
+  barWidth?: number;
+  chartSize?: string;
 }
 
-const GrowthGaugeChart: React.FC<GrowthGaugeChartProps> = ({ growthValue }) => {
+const GrowthGaugeChart: React.FC<GrowthGaugeChartProps> = ({
+  growthValue,
+  chartName = "Growth",
+  barWidth = 20,
+  chartSize = "150px",
+}) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const { theme } = useColorContext();
 
@@ -35,7 +43,7 @@ const GrowthGaugeChart: React.FC<GrowthGaugeChartProps> = ({ growthValue }) => {
             },
             axisLine: {
               lineStyle: {
-                width: 20,
+                width: barWidth,
                 color: [
                   [0, "#6A6CFF"], // Progress color
                   [1, "#E9E9E9"], // Background color
@@ -54,7 +62,7 @@ const GrowthGaugeChart: React.FC<GrowthGaugeChartProps> = ({ growthValue }) => {
             data: [
               {
                 value: growthValue,
-                name: "Growth",
+                name: chartName,
                 title: {
                   offsetCenter: ["0%", "0%"],
                   fontSize: "14px",
@@ -74,16 +82,31 @@ const GrowthGaugeChart: React.FC<GrowthGaugeChartProps> = ({ growthValue }) => {
         ],
       };
 
+      // Set the chart option
       myChart.setOption(option);
+      let resizeTimeout;
+      // Create a ResizeObserver
+      const resizeObserver = new ResizeObserver((entries) => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          for (let entry of entries) {
+            myChart.resize();
+          }
+        }, 100); // Debounce delay (100 ms in this case)
+      });
+
+      // Start observing the chart container
+      resizeObserver.observe(chartRef.current);
 
       // Cleanup on component unmount
       return () => {
         myChart.dispose();
+        resizeObserver.disconnect();
       };
     }
   }, [theme, growthValue]);
 
-  return <div ref={chartRef} style={{ width: "200px", height: "150px" }} />;
+  return <div ref={chartRef} style={{ width: chartSize, height: chartSize }} />;
 };
 
 export default GrowthGaugeChart;

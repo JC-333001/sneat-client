@@ -5,12 +5,13 @@ import { lightGreen } from "@mui/material/colors";
 
 const VerticalBarChart: React.FC = () => {
   const chartRef = useRef<HTMLDivElement>(null);
+  const chartInstance = useRef<echarts.ECharts | null>(null);
   const { theme } = useColorContext();
 
   useEffect(() => {
     if (chartRef.current) {
       // Initialize the chart
-      const myChart = echarts.init(chartRef.current);
+      chartInstance.current = echarts.init(chartRef.current);
 
       // Specify the chart options
       const option: echarts.EChartsOption = {
@@ -84,13 +85,26 @@ const VerticalBarChart: React.FC = () => {
           },
         ],
       };
-
+      let resizeTimeout;
       // Set the chart option
-      myChart.setOption(option);
+      chartInstance.current.setOption(option);
 
-      // Cleanup on component unmount
+      // Create a ResizeObserver
+      const resizeObserver = new ResizeObserver((entries) => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          for (let entry of entries) {
+            chartInstance.current?.resize();
+          }
+        }, 100); // Debounce delay (100 ms in this case)
+      });
+
+      // Start observing the chart container
+      resizeObserver.observe(chartRef.current);
       return () => {
-        myChart.dispose();
+        chartInstance.current?.dispose();
+        resizeObserver.disconnect();
+        // window.removeEventListener("resize", handleResize);
       };
     }
   }, []);

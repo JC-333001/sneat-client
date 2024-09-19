@@ -3,18 +3,19 @@ import { Box, Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { lightGreen } from "@mui/material/colors";
+import purpleCard from "../../../img/eCommerce/purple-card.png";
 
-export default function Sales() {
+export default function TransactionsCard() {
   return (
     <Box height={"150px"} marginLeft='0.5rem'>
       <Avatar
-        sx={{ bgcolor: "#E0F6FC", marginBottom: "0.5rem", borderRadius: "4px" }}
+        sx={{ marginBottom: "0.5rem" }}
         variant='square'
-        src='https://greakproject.vercel.app/images/cards/stats-vertical-wallet.png'
+        src={purpleCard}
       />
       <Box sx={{ textAlign: "left" }}>
         <Typography variant='subtitle1' gutterBottom>
-          Sales
+          Transactions
         </Typography>
         <Typography
           variant='h2'
@@ -25,7 +26,7 @@ export default function Sales() {
             color: "text.primary",
           }}
         >
-          $4679
+          $14854
         </Typography>
 
         <Typography
@@ -34,7 +35,7 @@ export default function Sales() {
           sx={{ color: "success.main", position: "relative", top: "-5px" }}
         >
           <ArrowUpwardIcon sx={{ position: "relative", top: "5px" }} />
-          28.14%
+          17.53%
         </Typography>
       </Box>
     </Box>

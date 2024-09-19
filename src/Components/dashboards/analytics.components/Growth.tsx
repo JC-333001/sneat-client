@@ -101,6 +101,7 @@ export default function Growth() {
   return (
     <Box
       height={"320px"}
+      width={"100%"}
       display={"flex"}
       flexDirection={"column"}
       justifyContent={"center"}
@@ -157,12 +158,19 @@ export default function Growth() {
       {/* <Button variant='outlined' onClick={handleClick}>
         2024 {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
       </Button> */}
-      <GrowthGaugeChart growthValue={displayData} />
-      <Typography variant='subtitle1' position={"relative"} top={"-30px"}>
-        62% Company Growth
-      </Typography>
-
-      <Box display={"flex"} justifyContent={"space-between"}>
+      <Box
+        display={"flex"}
+        flexDirection={"column"}
+        justifyContent={"center"}
+        alignItems={"center"}
+        width={"100%"}
+      >
+        <GrowthGaugeChart growthValue={displayData} />
+        <Typography variant='subtitle1' position={"relative"} top={"-30px"}>
+          62% Company Growth
+        </Typography>
+      </Box>
+      <Box display={"flex"} justifyContent={"space-around"} width={"100%"}>
         <Box display={"flex"}>
           <Avatar sx={{ bgcolor: "primary.light" }} variant='rounded'>
             <AttachMoneyIcon sx={{ color: "primary.main" }} />

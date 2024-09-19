@@ -11,12 +11,12 @@ import PageNotFound from "./routes/PageNotFound.tsx";
 import Navigation from "./routes/Navigation.tsx";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Crm from "./routes/Crm.tsx";
 import Signup from "./Components/authentication/Signup.tsx";
 import Login from "./Components/authentication/Login.tsx";
 import Profile from "./routes/Profile.tsx";
 import axios from "axios";
 import Chat from "./routes/Chat.tsx"; // Add this import
+import ECommerce from "./routes/ECommerce.tsx";
 
 function App() {
   const { theme } = useColorContext();
@@ -42,7 +42,7 @@ function App() {
               {/* Redirect from "/dashboard" to "/dashboard/analytics" */}
               <Route path='' element={<Navigate to='analytics' />} />
               <Route path='analytics' element={<Analytics />} />
-              <Route path='crm' element={<Crm />} />
+              <Route path='ecommerce' element={<ECommerce />} />
             </Route>
             <Route path='/calendar' element={<Calendar />}></Route>
             <Route path='/user-profile' element={<Profile />}></Route>
