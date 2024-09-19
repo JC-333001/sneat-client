@@ -65,6 +65,7 @@ export default function Login() {
             backgroundImage: `url(${loginImage})`,
             backgroundSize: "contain",
             backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
           }}
         ></Box>
       </Grid>

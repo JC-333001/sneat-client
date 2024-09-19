@@ -68,6 +68,7 @@ export default function Signup() {
             backgroundImage: `url(${signupImage})`,
             backgroundSize: "contain",
             backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
           }}
         ></Box>
       </Grid>
