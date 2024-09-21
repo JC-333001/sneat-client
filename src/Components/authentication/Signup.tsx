@@ -59,7 +59,12 @@ export default function Signup() {
         xs={false}
         sm={4}
         md={8}
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "background.paper",
+        }}
       >
         <Box
           width='70%'
@@ -69,6 +74,7 @@ export default function Signup() {
             backgroundSize: "contain",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
+            backgroundColor: "background.paper",
           }}
         ></Box>
       </Grid>
