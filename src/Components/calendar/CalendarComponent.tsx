@@ -145,26 +145,31 @@ const CalendarComponent = () => {
             until: eventData.recurrenceEnd,
           },
           url: eventData.url,
-          groupId: eventData.groupId || existingEvents.length.toString(),
+          groupId:
+            eventData.groupId || (existingEvents?.length ?? 0).toString(),
         }
       : {
           title: eventData.title,
           start: eventData.start,
           end: eventData.end,
           url: eventData.url,
-          groupId: eventData.groupId || existingEvents.length.toString(),
+          groupId:
+            eventData.groupId || (existingEvents?.length ?? 0).toString(),
         };
 
-    return eventData.groupId
-      ? existingEvents.map((event) =>
-          event.groupId === eventData.groupId ? newEvent : event
-        )
-      : [...existingEvents, newEvent];
+    return existingEvents
+      ? eventData.groupId
+        ? existingEvents.map((event) =>
+            event.groupId === eventData.groupId ? newEvent : event
+          )
+        : [...existingEvents, newEvent]
+      : [newEvent];
   };
 
   // Handle form submission to add a new event
   const handleAddEvent = async () => {
     let updatedEvents: CalendarEvent[];
+
     updatedEvents = createOrUpdateEvent(events, newEvent);
     if (events) {
       try {
