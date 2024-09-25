@@ -26,7 +26,6 @@ export async function getEvents(id) {
   try {
     const response = await axios.get(`${URL}/calendar/${id}`);
     const events = response.data.events;
-    console.log("events", events);
     return events;
   } catch (e) {
     console.error("Can't get this user's events", e);

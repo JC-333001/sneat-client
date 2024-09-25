@@ -77,7 +77,6 @@ const CalendarComponent = () => {
       setUserId(decoded._id);
       let res = await getEvents(decoded._id);
       setEvents(res);
-      console.log("in useeffetc", res);
     }
     loadUserData();
   }, []);
@@ -235,7 +234,6 @@ const CalendarComponent = () => {
               text: "+ add event",
               click: function () {
                 setDrawerOpen(true); // Directly set the drawer to open
-                console.log("Click event triggered! Drawer Open:", drawerOpen);
               },
             },
           }}
@@ -245,7 +243,6 @@ const CalendarComponent = () => {
             right: "addEvent,prev,next,dayGridMonth,timeGridWeek,timeGridDay",
           }}
           eventClick={(info) => {
-            console.log("event click", info.event._def.groupId);
             let eventInfo = events.find(
               (event) => event.groupId === info.event._def.groupId
             );

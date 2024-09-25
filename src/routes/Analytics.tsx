@@ -28,7 +28,6 @@ export default function Analytics() {
   const { mode } = useColorContext();
   // Custom media query to change lg to 1400px
   const isLg = useMediaQuery("(min-width:1100px)");
-  isLg ? console.log("8") : console.log("12");
   return (
     <Grid container spacing={2}>
       <Grid xs={12} md={isLg ? 8 : 12}>

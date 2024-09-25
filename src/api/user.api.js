@@ -4,7 +4,6 @@ import { process } from "ipaddr.js";
 
 // const URL = "https://sneat-backend-e54d9967a82c.herokuapp.com";
 const URL = process.env.REACT_APP_BACKEND_URL;
-console.log("backend url = ", URL);
 
 export async function createUser(user) {
   const response = await axios.post(`${URL}/users`, user);
